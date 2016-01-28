@@ -1,23 +1,17 @@
-from evdev import InputDevice, list_devices, categorize, ecodes, UInput, ecodes\
-    as e, InputEvent
-import time
+from evdev import UInput, ecodes as e
 
-devices = [InputDevice(fn) for fn in list_devices()]
+class Macro:
+    
+    def __init__(self, mK, kS):
+        self.macroKey = mK
+        self.keySequence = kS
 
-for i in range(len(devices)):
-    print i, ": " , devices[i].name
+    def __str__(self):
+        toReturn = "Macro Key: ", e.KEY[self.macroKey]
 
-choice = int(input())
-chosenDevice = devices[choice]
+    def macroKey(self):
+        return self.macroKey
 
-print "You chose" , devices[choice].name
-#TODO Need to figure out a better way to prevent previous key presses
-time.sleep(1)
-print "Please press program macro key"
-chosenDevice = InputDevice(list_devices()[choice])
+    def keySequence(self):
+        return self.keySequence
 
-#TODO read() seems to throw an IOError using read_loop() and break temporarily
-for event in chosenDevice.read_loop():
-    if event.type == e.EV_KEY:
-        print(categorize(event))
-        break;
