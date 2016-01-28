@@ -2,6 +2,7 @@ from evdev import InputDevice, list_devices, categorize, ecodes, UInput, ecodes\
     as e
 
 devices = [InputDevice(fn) for fn in list_devices()]
+print list_devices()
 
 for dev in devices:
     print(dev.fn, dev.name, dev.phys)
