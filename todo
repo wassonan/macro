@@ -1,4 +1,4 @@
-1. Read and store all key strokes not just keydown
+1. Read and store all key strokes not just keydown - Done V0.2
 2. Option to obtain macro from multiple sources
-3. Output macro via usb on pi
+3. Output macro via bluetooth
 4. Be able to save macros and create profiles

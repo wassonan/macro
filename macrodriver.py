@@ -36,6 +36,7 @@ macros = []
 
 for event in chosenDevice.read_loop():
     if event.type == e.EV_KEY:
+
         # If the program macro key is hit
         if event.code == programMacroKey:
             if event.value == events.KeyEvent.key_down:
