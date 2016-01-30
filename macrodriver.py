@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from macro import Macro
 from evdev import InputDevice, list_devices, categorize, UInput, ecodes as e,\
     InputEvent, events
@@ -23,38 +24,41 @@ while programMacroKey == None:
     if event != None:
         if event.type == e.EV_KEY and event.value == events.KeyEvent.key_down:
             programMacroKey = event.code
-            #print(categorize(event))
 
 print e.KEY[programMacroKey]
 
 recording = False
 currentMacroKey = None;
 currentMacro = []
+currentState = []
 macros = []
 
 
 for event in chosenDevice.read_loop():
-    if event.type == e.EV_KEY and event.value == events.KeyEvent.key_down:
+    if event.type == e.EV_KEY:
         # If the program macro key is hit
         if event.code == programMacroKey:
-            if not recording:
-                print "Recording"
-                recording = True
+            if event.value == events.KeyEvent.key_down:
+                if not recording:
+                    print "Recording"
+                    recording = True
 
-            elif currentMacroKey == None or currentMacro == []:
-                    print "Recording canceled"
+                elif currentMacroKey == None or currentMacro == []:
+                        print "Recording canceled"
+                        recording = False
+                        currentMacroKey = None
+                        currentMacro = []
+                        currentMacroState = []
+
+                else:
+                    newMacro = Macro(currentMacroKey, currentMacro, currentState)
+                    print "Recording saved: " + str(newMacro)
+
+                    macros.append(newMacro)
                     recording = False
                     currentMacroKey = None
                     currentMacro = []
-
-            else:
-                newMacro = Macro(currentMacroKey, currentMacro)
-                print "Recording saved: " + str(newMacro)
-
-                macros.append(newMacro)
-                recording = False
-                currentMacroKey = None
-                currentMacro = []
+                    currentState = []
 
         # If any other key is hit
         else:
@@ -64,6 +68,7 @@ for event in chosenDevice.read_loop():
 
                 else:
                     currentMacro.append(event.code)
+                    currentState.append(event.value)
 
             else:
                 for macro in macros:
